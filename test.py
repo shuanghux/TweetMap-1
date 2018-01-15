@@ -75,7 +75,9 @@ def search():
 	submitJSON['index'] = len(hitsArr)
 	submitJSON['results'] = postsArr
 
-	return jsonify(**submitJSON)
+
+
+	return json.dumps(submitJSON)
 
 
 
