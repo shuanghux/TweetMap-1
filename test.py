@@ -61,9 +61,22 @@ def search():
 
 	jsonObj = es.search(index='posts', size=10000, body={"query": {"match": {'text':{'query': searchword}}}})
 
-	print json.dumps(jsonObj)
+	#print json.dumps(jsonObj)
 
-	return jsonify(**jsonObj)
+
+	hitsArr = jsonObj["hits"]["hits"]
+
+	postsArr = []
+
+	for hitJsonObj in hitsArr:
+		postsArr.append(hitJsonObj["_source"])
+
+	submitJSON = {}
+	submitJSON['index'] = len(hitsArr)
+	submitJSON['results'] = postsArr
+
+	return jsonify(**submitJSON)
+
 
 
 
