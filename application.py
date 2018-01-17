@@ -57,7 +57,7 @@ def store():
 @application.route('/searchKey', methods=['GET'])	
 def search():
 
-	searchword = request.args.get('key', '')
+	searchword = request.args.get('getQuote', '')
 
 	jsonObj = es.search(index='posts', size=10000, body={"query": {"match": {'text':{'query': searchword}}}})
 
@@ -87,8 +87,10 @@ def search():
 
 
 if __name__ == "__main__":
-	application.debug = True
+	#application.debug = True
+	application.threaded = True
 	application.run()
+
 
 
 
