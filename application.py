@@ -30,8 +30,9 @@ CORS(application)
 
 @application.route('/')
 def index():
-	result = {"value": "Hello, world"}
-	return jsonify(**result)
+	# result = {"value": "Hello, world"}
+	# return jsonify(**result)
+	return render_template('index.html')
 
 @application.route('/store', methods=['POST'])
 def store():

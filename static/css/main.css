@@ -1,0 +1,46 @@
+#map {
+    height: 90%;
+    width: 100%;
+    left: 0;
+    position: relative;
+    top: 0;
+}
+
+
+/*#div_form {
+	vertical-align: middle;
+	margin-bottom: 5px;
+	height: 50px;
+	padding: 5px;
+}*/
+
+.navbar {
+	margin-bottom: 0px;
+}
+#search_form {
+	float: right;
+	max-width: 500px;
+	/*margin: auto;
+	margin-bottom: 20px;*/
+}
+
+#search_box {
+	width: 400px;
+}
+
+.form-inline {
+	padding: 7px 7px;
+	float: right;
+	margin-right: 40px;
+	vertical-align: middle;
+}
+html, body {
+	background-color: #102737;
+	height: 100%;
+    width: 100%;
+}
+
+.navbar-brand {
+	color: white;
+	font-size:24px;
+}
