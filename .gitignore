@@ -1,3 +1,4 @@
-
+config.py
+.gitignore
 .DS_Store
 env/
