@@ -3,12 +3,11 @@ from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 import json
-import requests
 import oauth2
 from kafka import KafkaProducer
 import config
 
-#Variables that contains the user credentials to access Twitter API 
+# Variables that contains the user credentials to access Twitter API
 access_token = config.access_token
 access_token_secret = config.access_token_secret
 consumer_key = config.consumer_key
@@ -29,7 +28,7 @@ resp, content = client.request(url)
 trends = json.loads(content)[0]["trends"]
 trends_keywords = []
 for trend in trends:
-	trends_keywords.append(trend["name"])
+    trends_keywords.append(trend["name"])
 # print keywords
 
 # This is a basic listener that just prints received tweets to stdout.
@@ -53,9 +52,10 @@ class StdOutListener(StreamListener):
                 x2 = dataJSON['place']['bounding_box']['coordinates'][0][2][0]
                 y1 = dataJSON['place']['bounding_box']['coordinates'][0][0][1]
                 y2 = dataJSON['place']['bounding_box']['coordinates'][0][1][1]
+                
                 coordinates = [(x1 + x2) / 2, (y1 + y2) / 2]
                 if dataJSON['coordinates'] is not None:
-                	coordinates = dataJSON['coordinates']['coordinates']
+                    coordinates = dataJSON['coordinates']['coordinates']
                 tweet_dict = {'text': dataJSON['text'],
                               'created_at': created_at,
                               'user_name': user_name,
@@ -87,8 +87,8 @@ if __name__ == '__main__':
 
     # This line filter Twitter Streams to capture data by the keywords:
     my_keywords = ["job", "hiring", "here", "Join", "team", "apply", "See", "sea", "star",
-    				"latest", "home", "trump", "love", "NBA", "google", "python", "java",
-    				"usc", "US", "UK", "soccer", "music", "football", "basketball", "CS",
-    				"college", "hero", "car", "study", "EE", "Rockets", "Lakers", "news"]
+                    "latest", "home", "trump", "love", "NBA", "google", "python", "java",
+                    "usc", "US", "UK", "soccer", "music", "football", "basketball", "CS",
+                    "college", "hero", "car", "study", "EE", "Rockets", "Lakers", "news"]
     keywords = trends_keywords + my_keywords
     stream.filter(track=keywords)

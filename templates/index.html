@@ -8,6 +8,8 @@
 	<link rel="stylesheet" type="text/css" href="static/css/main.css">
 	<script type="text/javascript" src="/static/js/map-icons.js"></script>
 	<link rel="stylesheet" type="text/css" href="/static/css/map-icons.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
+	<!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
 </head>
 
 <body>
@@ -18,20 +20,30 @@
 			<button id="btn_search" class="btn btn-outline-secondary btn-primary my-2 my-sm-0" type="button" onclick="getQuote()">
 				<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 			</button>
+			<button class="btn btn-outline-secondary btn-primary my-2 my-sm-0" type="button" onclick="showHeatmap()">
+				<span>Heatmap</span>
+			</button>
+			<button class="btn btn-outline-secondary btn-primary my-2 my-sm-0" type="button" onclick="showSentiment()">
+				<span>Sentiment Analysis</span>
+			</button>
 			<button id="btn_clearAll" class="btn btn-outline-secondary btn-danger my-2 my-sm-0" type="button" onclick="clearAll()">
 				<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 			</button>
 		</div>
 	</nav>
 
-
+	<h5 id="text"> </h5>
 	<div id="map"></div>
+	<section id="graph"></section>
 	<script type="text/javascript" src="/static/js/main.js"></script>
 	<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
 	</script>
 	<script async defer
-	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDB5AKTz4tep33ipasfcIpgzT2ajfu0Yto&callback=initMap">
-</script>
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDB5AKTz4tep33ipasfcIpgzT2ajfu0Yto&libraries=visualization&callback=initMap">
+	</script>
+	<!-- <script async defer
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDB5AKTz4tep33ipasfcIpgzT2ajfu0Yto&libraries=visualization&callback=initMap"> -->
+<!-- </script> -->
 </body>
 </html>
 
