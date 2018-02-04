@@ -3,11 +3,12 @@ from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 import json
+import requests
 import oauth2
 from kafka import KafkaProducer
 import config
 
-# Variables that contains the user credentials to access Twitter API
+#Variables that contains the user credentials to access Twitter API 
 access_token = config.access_token
 access_token_secret = config.access_token_secret
 consumer_key = config.consumer_key
@@ -52,7 +53,6 @@ class StdOutListener(StreamListener):
                 x2 = dataJSON['place']['bounding_box']['coordinates'][0][2][0]
                 y1 = dataJSON['place']['bounding_box']['coordinates'][0][0][1]
                 y2 = dataJSON['place']['bounding_box']['coordinates'][0][1][1]
-                
                 coordinates = [(x1 + x2) / 2, (y1 + y2) / 2]
                 if dataJSON['coordinates'] is not None:
                     coordinates = dataJSON['coordinates']['coordinates']
