@@ -6,42 +6,71 @@ from elasticsearch import Elasticsearch
 from flask import Flask, request, jsonify, render_template, send_file
 from flask_cors import CORS, cross_origin
 
-es = Elasticsearch(
-    ['https://search-tweetmap-px7q55rz5bmnnz3iuzedyvr4ta.us-west-1.es.amazonaws.com/', ])
+import logging
+# Add Logger
+logger = logging.getLogger(__name__)
+newTweets = []
+
+es=Elasticsearch(['https://search-tweetmap-px7q55rz5bmnnz3iuzedyvr4ta.us-west-1.es.amazonaws.com/',])
 application = Flask(__name__)
 CORS(application)
 
 
 @application.route('/')
 def index():
-        # result = {"value": "Hello, world"}
-        # return jsonify(**result)
-    return render_template('index.html')
 
+    return render_template('index.html')
 
 @application.route('/store', methods=['POST'])
 def store():
 
-    jsonData = request.get_json()
+    global newTweets
+    header = request.headers.get('x-amz-sns-message-type')
+    try:
+        data = json.loads(request.data)
+    except:
+        pass
 
-    jsonArr = jsonData["matched_results"]
+    if header == 'SubscriptionConfirmation' and 'SubscribeURL' in data:
+        url = data['SubscribeURL']
+        #Response to SNS
+        response = requests.get(url)
 
-    for singlePost in jsonArr:
+        logger.info("Subscribed to SNS: " + url)
+        return "Subscribed to SNS: " + url
 
-        es.index(index='sentimentaltweets', doc_type='tweets', body=singlePost)
+    if header == 'Notification':
+        logger.info(data['Message'])
 
-    return jsonify(**{"result": "OK"})
+        es.index(index='twittertrendv1', doc_type='tweet', body=json.loads(json.dumps(data['Message'])))
+        newTweets.append(json.loads(data['Message']))
+        return data['Message']
+
+    if len(newTweets) > 100:
+        newTweets = []
+
+    return jsonify(**{"result":"OK"})
+
+#update tweets for the front end
+@application.route('/update', methods=['GET'])
+def update():
+    global newTweets
+    if len(newTweets) > 0:
+        updateTweets = []
+        while len(newTweets) > 0 and len(updateTweets) < 10:
+            updateTweets.append(newTweets.pop(0))       
+        return jsonify(**{"result":updateTweets})
+
+    else:
+        return jsonify(**{"result":[]})
 
 
-@application.route('/searchKey', methods=['GET'])
+@application.route('/searchKey', methods=['GET'])   
 def search():
 
     searchword = request.args.get('getQuote', '')
 
-    jsonObj = es.search(index='sentimentaltweets', size=10000, body={
-                        "query": {"match": {'text': {'query': searchword}}}})
-
-    # print json.dumps(jsonObj)
+    jsonObj = es.search(index='twittertrendv1', size=10000, body={"query": {"match": {'text':{'query': searchword}}}})
 
     hitsArr = jsonObj["hits"]["hits"]
 
@@ -59,5 +88,15 @@ def search():
 
 if __name__ == "__main__":
     #application.debug = True
-    # application.threaded = True
+    application.threaded = True
     application.run()
+
+
+
+
+
+
+
+        
+
+    
